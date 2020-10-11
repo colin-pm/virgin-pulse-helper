@@ -12,7 +12,7 @@ class VirginPulseHelper(unittest.TestCase):
     def setUp(self):
         chrome_options = Options()
         chrome_options.add_argument("user-data-dir=selenium")
-        self.browser = webdriver.Chrome(chrome_options=chrome_options)
+        self.browser = webdriver.Chrome(options=chrome_options)
         self.addCleanup(self.browser.quit)
         self.login()
 
@@ -21,13 +21,13 @@ class VirginPulseHelper(unittest.TestCase):
         secret = os.environ.get("SECRET")
         # Find form
         self.browser.get("https://app.member.virginpulse.com/")
+        time.sleep(5)
         try:
             self.browser.find_element_by_xpath('//*[@id="username"]')
         except NoSuchElementException:
             # Prompt user to pass MFA
             input("Captcha detected: Press Enter to continue after passing Captcha")
             pass
-        time.sleep(random.choice([1, 2, 4]))
         self.browser.find_element_by_xpath('//*[@id="username"]').send_keys(uname)
         self.browser.find_element_by_xpath('//*[@id="password"]').send_keys(secret)
         time.sleep(random.choice([2, 5, 7]))
